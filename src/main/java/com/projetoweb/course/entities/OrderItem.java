@@ -16,7 +16,7 @@ public class OrderItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId		//Sempre quando for usar um ID composto, instancia ela		
-	private OrderItemPK id = new OrderItemPK();				//Chave composta
+	private OrderItemPK id = new OrderItemPK();		//Chave composta que guarda o produto e o pedido
 
 	private Integer quantity;
 	private Double price;

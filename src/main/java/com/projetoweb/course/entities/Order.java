@@ -29,16 +29,18 @@ public class Order implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	//Antação para formatar o Json
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
 	private Instant instant; // Classe melhor que o Date. Classe surgiu depois do Java 8
 
+	//Tipo inteiro para mostrar explicitamente q está salvando no BD um número e não um enum 
 	private Integer orderStatus;
 
 	@ManyToOne
 	@JoinColumn(name = "client_id")
 	private User client; // Nome da variável respeitando a formma que está no diagrama
 
-	@OneToMany(mappedBy = "id.order") // É o ID que tem o pedido (order)
+	@OneToMany(mappedBy = "id.order") 	//O atributo ID (OrderItem) que tem acesso ao pedido (order)
 	private Set<OrderItem> items = new HashSet<>();
 	
 	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
@@ -76,7 +78,7 @@ public class Order implements Serializable {
 
 	public void setOrderStatus(OrderStatus orderStatus) {
 		if (orderStatus != null) {
-			this.orderStatus = orderStatus.getCode();
+			this.orderStatus = orderStatus.getCode();		//Quarda o orderStatus como inteiro
 		}
 	}
 

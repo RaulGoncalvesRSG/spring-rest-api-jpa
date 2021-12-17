@@ -9,7 +9,8 @@ import javax.persistence.ManyToOne;
 import com.projetoweb.course.entities.Order;
 import com.projetoweb.course.entities.Product;
 
-//Classe chave composta para Product e Order. Essa classe não possui construtor
+/*Classe chave composta para Product e Order, n possui PK própria. Classe auxiliar para representar o
+ par (produto e pedido) pq é esse par q vai identificar o obj OrderItem. Essa classe não possui construtor*/
 @Embeddable
 public class OrderItemPK implements Serializable{
 

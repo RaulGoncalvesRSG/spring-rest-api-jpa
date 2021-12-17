@@ -27,7 +27,9 @@ public class User implements Serializable {
 	private String phone;
 	private String password;
 	
-	@JsonIgnore	 //Resolve o problema do loop quando uma associaçao chama a outra. Ex: User tem Order e Order tem User
+	@JsonIgnore	 
+	/*Resolve o problema do loop quando uma associaçao chama a outra. Ex: User tem Order e Order 
+	 * tem User. Qnd carrega o user, os pedidos não n retornados no json*/
 	@OneToMany(mappedBy = "client")
 	private List<Order> orders = new ArrayList<>();
 
