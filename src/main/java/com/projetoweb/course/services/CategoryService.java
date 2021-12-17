@@ -1,24 +1,20 @@
 package com.projetoweb.course.services;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import com.projetoweb.course.entities.Category;
 import com.projetoweb.course.repositories.CategoryRepository;
 
 @Service 			
-public class CategoryService {
+public class CategoryService implements GenericService<Category, Long> {
 
 	@Autowired
 	private CategoryRepository repository;
-	
-	public List<Category> findAll(){
-		return repository.findAll();
-	}
-	
-	public Category findById(Long id) {
-		return repository.findById(id).get();
+
+	@Override
+	public JpaRepository<Category, Long> getRepository() {
+		return repository;
 	}
 }
