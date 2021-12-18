@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,11 +54,18 @@ public class CategoryResource {
 	
 	@PostMapping			//@RequestBody - Para o endpoint aceitar o obj
  	public ResponseEntity<Void> insert(@RequestBody Category obj) {
-		obj = service.insert(obj);
+		obj = service.save(obj);
 		
 		//Coloca na resposta o cabeçalho do novo recurso criado, isso é uma boa prática
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
 		return ResponseEntity.created(uri).build();			//created retorna o status 201 do http
+	}
+	
+	@PutMapping(value="/{id}")
+ 	public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody Category obj) {
+		obj.setId(id);				//Seta o ID para não criar um novo obj
+		service.save(obj);
+		return ResponseEntity.noContent().build();
 	}
 	
 	@DeleteMapping(value="/{id}")

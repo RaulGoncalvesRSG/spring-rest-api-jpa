@@ -63,7 +63,6 @@ public class UserService {
 		//getOne Prepara o objeto monitorado sem ir no BD, diferente do getById. Essa forma é mais eficiente
 		try {
 			User entity = repository.getOne(id);
-			
 			updateData(entity, obj);
 			
 			return repository.save(entity);

@@ -44,7 +44,7 @@ public class UserResource {
 	}
 	
 	@PostMapping 	//@RequestBody - O obj vai chegar como Json na requisição e esse Json será convertido para User										
-	public ResponseEntity<User> insert (@RequestBody User obj){
+	public ResponseEntity<User> insert(@RequestBody User obj){
 		obj = service.insert(obj);
 		
 		//Forma adequada de inserir um recurso no BD. Retorna um Status 201 informando que um recurso foi criado
@@ -54,17 +54,17 @@ public class UserResource {
 		//return ResponseEntity.ok().body(obj);		//Funciona sem URI, mas não é a forma mais adequada
 	}
 	
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj){
+		obj = service.update(id, obj);
+		return ResponseEntity.ok().body(obj);
+	}
+	
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<Void> delete (@PathVariable Long id){
+	public ResponseEntity<Void> delete(@PathVariable Long id){
 		service.delete(id);			
 		//Resposta vazia que possui um cabeçalho sem conteúdo. Status 204
 		return ResponseEntity.noContent().build();	
-	}
-	
-	@PutMapping(value = "/{id}")
-	public ResponseEntity<User> update (@PathVariable Long id, @RequestBody User obj){
-		obj = service.update(id, obj);
-		return ResponseEntity.ok().body(obj);
 	}
 	
 	//http://localhost:8080/users/search-name?name=alex
