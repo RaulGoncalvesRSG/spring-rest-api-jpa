@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -30,7 +33,6 @@ public class UserResource {
 	@GetMapping
 	public ResponseEntity<List<User>> findAll(){
 		//ResponseEntity - tipo específico do Spring para retornar respostas de requisição Web
-		
 		List<User> list = service.findAll();
 		return ResponseEntity.ok().body(list);			//Retorna no formato padrão Json
 	}
@@ -63,5 +65,15 @@ public class UserResource {
 	public ResponseEntity<User> update (@PathVariable Long id, @RequestBody User obj){
 		obj = service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
+	}
+	
+	//http://localhost:8080/users/search-name?name=alex
+	@GetMapping(value = "/search-name")
+	public ResponseEntity<Page<User>> searchByName(
+			@RequestParam(value = "name", defaultValue = "") String name,
+			Pageable pageable){
+		
+		Page<User> list = service.searchName(name, pageable);
+		return ResponseEntity.ok().body(list);
 	}
 }

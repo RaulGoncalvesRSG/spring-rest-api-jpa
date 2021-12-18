@@ -19,7 +19,7 @@ public class OrderItem implements Serializable {
 	private OrderItemPK id = new OrderItemPK();		//Chave composta que guarda o produto e o pedido
 
 	private Integer quantity;
-	private Double price;
+	private Double price;		   //Preço do produto no momento q foi comprado
 	
 	public OrderItem() {
 	}

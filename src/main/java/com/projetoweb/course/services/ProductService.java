@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,5 +36,9 @@ public class ProductService {
 	
 	public Product findById(Long id) {
 		return repository.findById(id).get();
+	}
+
+	public Page<Product> findByPriceBetween(Double minPrice, Double maxPrice, Pageable pageable) {
+		return repository.findByPriceBetween(minPrice, maxPrice, pageable);
 	}
 }

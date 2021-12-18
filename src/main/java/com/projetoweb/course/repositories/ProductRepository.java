@@ -2,6 +2,8 @@ package com.projetoweb.course.repositories;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -13,4 +15,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 	apenas List. "IN" referencia apenas os produtos presentes na Lista do parâmetro*/
 	@Query("SELECT obj FROM Product obj JOIN FETCH obj.categories WHERE obj IN :products")
 	List<Product> findProductsCategories(List<Product> products);
+	
+	Page<Product> findByPriceBetween(Double minSalary, Double maxSalary, Pageable pageable);
 }
