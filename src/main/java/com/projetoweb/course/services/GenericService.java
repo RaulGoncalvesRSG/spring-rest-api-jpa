@@ -17,6 +17,10 @@ public interface GenericService<T, ID> {
 		return getRepository().findById(id).get();
 	}
 	
+	default T insert(T obj) {
+		return getRepository().save(obj);
+	}
+	
 	default void delete(ID id) {
 		getRepository().deleteById(id);
 	}

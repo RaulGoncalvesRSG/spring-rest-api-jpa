@@ -1,24 +1,20 @@
 package com.projetoweb.course.services;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import com.projetoweb.course.entities.Order;
 import com.projetoweb.course.repositories.OrderRepository;
 
 @Service 			
-public class OrderService {
+public class OrderService implements GenericService<Order, Long>{
 
 	@Autowired
 	private OrderRepository repository;
 	
-	public List<Order> findAll(){
-		return repository.findAll();
-	}
-	
-	public Order findById(Long id) {
-		return repository.findById(id).get();
+	@Override
+	public JpaRepository<Order, Long> getRepository() {
+		return repository;
 	}
 }
