@@ -1,0 +1,11 @@
+INSERT INTO tb_category (name) values ('A');
+INSERT INTO tb_category (name) values ('B');
+INSERT INTO tb_category (name) values ('C');
+INSERT INTO tb_category (name) values ('D');
+INSERT INTO tb_category (name) values ('E');
+INSERT INTO tb_category (name) values ('F');
+INSERT INTO tb_category (name) values ('G');
+INSERT INTO tb_category (name) values ('H');
+INSERT INTO tb_category (name) values ('I');
+INSERT INTO tb_category (name) values ('J');
+INSERT INTO tb_category (name) values ('K');

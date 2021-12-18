@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +41,14 @@ public class ProductResource {
 			@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "size", defaultValue = "10") Integer size){
 		
-		PageRequest pageRequest = PageRequest.of(page, size);
+		//Ordenação por preço e caso haja empate, aplica a ordenação por nome
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("price", "name").ascending());
+		
+		//Com a lista de Orders é possível escolher a direção de cada parâmetro
+	/*	PageRequest pageRequest2 = PageRequest.of(page, size, Sort.by(
+						new Order(Direction.ASC, "price"), 
+						new Order(Direction.ASC, "name")));*/
+		
 		Page<Product> list = service.find(pageRequest);
 		
 		return ResponseEntity.ok().body(list);
