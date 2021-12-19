@@ -3,6 +3,8 @@ package com.projetoweb.course.resources;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,7 +55,7 @@ public class CategoryResource {
 	}
 	
 	@PostMapping			//@RequestBody - Para o endpoint aceitar o obj
- 	public ResponseEntity<Void> insert(@RequestBody Category obj) {
+ 	public ResponseEntity<Void> insert(@Valid @RequestBody Category obj) {
 		obj = service.save(obj);
 		
 		//Coloca na resposta o cabeçalho do novo recurso criado, isso é uma boa prática
@@ -62,7 +64,7 @@ public class CategoryResource {
 	}
 	
 	@PutMapping(value="/{id}")
- 	public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody Category obj) {
+ 	public ResponseEntity<Void> update(@Valid @PathVariable Long id, @RequestBody Category obj) {
 		obj.setId(id);				//Seta o ID para não criar um novo obj
 		service.save(obj);
 		return ResponseEntity.noContent().build();

@@ -2,8 +2,10 @@ package com.projetoweb.course.resources.exceptions;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.projetoweb.course.entities.Field;
 
 /*Por padrão, o Spring retorna o objeto de erro com esses dados. Então para fazer um tratamento manual das 
 exceções e retornar um objeto parecido, é criada uma classe com os mesmos campos.
@@ -19,9 +21,9 @@ public class StandardError implements Serializable {
 	private String error;
 	private String message;
 	private String path; 			// Caminho que fez a requisição e deu erro
+	private List<Field> campos;		//Lista de campos com problemas. Validação de argumentos
 
 	public StandardError() {
-
 	}
 
 	public StandardError(Instant timestamp, Integer status, String error, String message, String path) {
@@ -70,5 +72,13 @@ public class StandardError implements Serializable {
 
 	public void setPath(String path) {
 		this.path = path;
+	}
+
+	public List<Field> getCampos() {
+		return campos;
+	}
+
+	public void setCampos(List<Field> campos) {
+		this.campos = campos;
 	}
 }

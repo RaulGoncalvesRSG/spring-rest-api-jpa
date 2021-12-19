@@ -3,6 +3,8 @@ package com.projetoweb.course.resources;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,14 +39,16 @@ public class UserResource {
 		return ResponseEntity.ok().body(list);			//Retorna no formato padrão Json
 	}
 	
-	@GetMapping(value = "/{id}")
+	@GetMapping(value = "/{id}")	 //@PathVariable - vincula o parâmetro com o nome do valor {}
 	public ResponseEntity<User> findById(@PathVariable Long id){
 		User obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
-	@PostMapping 	//@RequestBody - O obj vai chegar como Json na requisição e esse Json será convertido para User										
-	public ResponseEntity<User> insert(@RequestBody User obj){
+	/*@RequestBody- O obj vai chegar como Json na requisição e esse Json será convertido para User			
+	  @Valid- ativa a validação no obj*/
+	@PostMapping 	
+	public ResponseEntity<User> insert(@Valid @RequestBody User obj){
 		obj = service.insert(obj);
 		
 		//Forma adequada de inserir um recurso no BD. Retorna um Status 201 informando que um recurso foi criado
@@ -55,7 +59,7 @@ public class UserResource {
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj){
+	public ResponseEntity<User> update(@Valid @PathVariable Long id, @RequestBody User obj){
 		obj = service.update(id, obj);
 		return ResponseEntity.ok().body(obj);
 	}
