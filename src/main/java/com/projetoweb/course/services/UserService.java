@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -38,6 +39,11 @@ public class UserService {
 	}
 	
 	public User insert (User obj){
+		User userExistente = repository.findByEmail(obj.getEmail());
+		
+		if (userExistente != null && !userExistente.equals(obj)) {
+			throw new ServiceException("Já existe um usuário cadastrado com este e-mail");
+		}
 		return repository.save(obj);
 	}
 	

@@ -30,7 +30,6 @@ public class Product implements Serializable {
 	@NotBlank
 	private String name;
 	private String description;
-	@NotBlank
 	private Double price;
 	private String imgUrl;
 	

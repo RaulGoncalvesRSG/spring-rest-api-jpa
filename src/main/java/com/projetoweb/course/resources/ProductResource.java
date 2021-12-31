@@ -45,13 +45,10 @@ public class ProductResource {
 			@RequestParam(value = "size", defaultValue = "10") Integer size){
 		
 		//Ordenação por preço e caso haja empate, aplica a ordenação por nome
-		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("price", "name").ascending());
+		Sort sort = Sort.by(Sort.Order.asc("price"), Sort.Order.desc("name"));
+	//	Sort sort2 = Sort.by("price", "name").ascending();
 		
-		//Com a lista de Orders é possível escolher a direção de cada parâmetro
-	/*	PageRequest pageRequest2 = PageRequest.of(page, size, Sort.by(
-						new Order(Direction.ASC, "price"), 
-						new Order(Direction.ASC, "name")));*/
-		
+		PageRequest pageRequest = PageRequest.of(page, size, sort);
 		Page<Product> list = service.find(pageRequest);
 		
 		return ResponseEntity.ok().body(list);

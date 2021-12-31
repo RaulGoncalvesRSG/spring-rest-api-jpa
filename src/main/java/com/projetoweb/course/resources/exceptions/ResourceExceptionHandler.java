@@ -2,9 +2,11 @@ package com.projetoweb.course.resources.exceptions;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -23,7 +25,9 @@ import com.projetoweb.course.entities.Field;
 import com.projetoweb.course.services.exceptions.DatabaseException;
 import com.projetoweb.course.services.exceptions.ResourceNotFoundException;
 
-//Classe para receber o tratamento manual - faz um método para cada tipo de erro (classe criada)
+/*Classe para receber o tratamento manual - faz um método para cada tipo de erro (classe criada)
+Estende a classe para poder sobreescrever o método
+* handleMethodArgumentNotValid*/
 @ControllerAdvice //Intercepta as execções q acontecerem para q este obj possa executar o possível tratamento
 public class ResourceExceptionHandler extends ResponseEntityExceptionHandler{
 	
@@ -34,11 +38,10 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler{
 	/*O método intercepta qualquer exceção que for lançada do tipo ResourceNotFoundException e faz o 
 	tratamento*/
 	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity<StandardError> resouceNotFound(ResourceNotFoundException e, 
-			HttpServletRequest request){
-		
+	public ResponseEntity<StandardError> resouceNotFound(ResourceNotFoundException e, HttpServletRequest request){
 		String error = "Resource not found";
 		HttpStatus status = HttpStatus.NOT_FOUND;
+		
 		StandardError sError = new StandardError(Instant.now(), status.value(), error, e.getMessage(), 
 				request.getRequestURI());
 		
@@ -49,8 +52,20 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler{
 	@ExceptionHandler(DatabaseException.class)
 	public ResponseEntity<StandardError> database(DatabaseException e, HttpServletRequest request){
 		String error = "Database error";
-		HttpStatus status = HttpStatus.BAD_REQUEST;
+		HttpStatus status = HttpStatus.BAD_REQUEST;		//Código 400
+		
 		StandardError sError = new StandardError(Instant.now(), status.value(), error, e.getMessage(), 
+				request.getRequestURI());
+		
+		return ResponseEntity.status(status).body(sError);
+	}
+	
+	@ExceptionHandler(ServiceException.class)
+	public ResponseEntity<Object> handleService(ServiceException ex, HttpServletRequest request) {
+		String error = "Falha na camada de serviço";
+		HttpStatus status = HttpStatus.BAD_REQUEST;			
+		
+		StandardError sError = new StandardError(Instant.now(), status.value(), error, ex.getMessage(), 
 				request.getRequestURI());
 		
 		return ResponseEntity.status(status).body(sError);
@@ -59,7 +74,7 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler{
 	@Override			//Método sobreescrito. Argumento inválido
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		var campos = new ArrayList<Field>();
+		List<Field> campos = new ArrayList<Field>();
 		
 		//Faz uma iteração para obter todos os erros encontrados
 		for (ObjectError error : ex.getBindingResult().getAllErrors()) {
@@ -70,14 +85,13 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler{
 			campos.add(new Field(nome, mensagem));
 		}
 		
-		var sError = new StandardError();
+		StandardError sError = new StandardError();
 		sError.setStatus(status.value());
 		sError.setError("Argumento inválido");
 		sError.setMessage("Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente");
 		sError.setTimestamp(Instant.now());
 		sError.setCampos(campos);
 		
-		//Adiciona o problema no body da resposta
-		return super.handleExceptionInternal(ex, sError, headers, status, request);
+		return ResponseEntity.status(status).body(sError);
 	}
 }
