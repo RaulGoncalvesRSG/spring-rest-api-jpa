@@ -11,4 +11,4 @@
 * Java
 
 ### Modelo de Domínio
-![Modelo de Domínio](informação_projeto/uml.png)
+![Modelo de Domínio](imagens/uml.png)
